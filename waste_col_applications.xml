@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<waste_col_applications>
+<application>
+<type ID='selectbox'>
+<location>Streets.php</location>
+</type>
+</application>
+<application>
+<type ID='CalFunctions'>
+<location>CalFunctions.php</location>
+</type>
+</application>
+<application>
+<type ID='calendar'>
+<location>WasteColCalendar.php</location>
+</type>
+</application>
+<application>
+<type ID='bootstrap'>
+<location>./resources/bootstrap-3.3.7-dist</location>
+</type>
+</application>
+<application>
+<type ID='select2'>
+<location>./resources/select2-4.0.6-rc.0/dist</location>
+</type>
+</application>
+<application>
+<type ID='config_select2'>
+<location>./config_select2.js</location>
+</type>
+</application>
+<application>
+<type ID='jquery'>
+<location>./resources/jquery/jquery-3.3.1.min.js</location>
+</type>
+</application>
+<application>
+<type ID='app_access_log'>
+<location>./logs/app_access.log</location>
+</type>
+</application>
+<application>
+<type ID='css'>
+<location>./css/wastecol2.css</location>
+</type>
+</application>
+<application>
+<type ID='MonthCalendar'>
+<location>./MonthCalendar.php</location>
+</type>
+</application>
+<application>
+<type ID='nav_bar'>
+<location>./nav.php</location>
+</type>
+</application>
+<application>
+<type ID='color_dot_js'>
+<location>./color_dot.js</location>
+</type>
+</application>
+<application>
+<type ID='font-awesome'>
+<location>./resources/font-awesome/5.0.8/css/fontawesome-all.min.css</location>
+</type>
+</application>
+</waste_col_applications>

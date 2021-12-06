@@ -1,0 +1,1 @@
+Folder required for app to function. Download the appropriate distribution in this folder.

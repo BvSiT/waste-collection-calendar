@@ -1,0 +1,609 @@
+/*
+* CSS "Always on the bottom" FooterCSS "Always on the bottom" FooterCSS "Always * on the bottom" Footer
+* 
+* Geplakt uit <https://codepen.io/cbracco/pen/zekgx> 
+* All added code marked as AOB
+*/
+
+
+html { 
+  height: 100%;
+  box-sizing: border-box;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit; 
+}
+
+body {
+	position: relative; /*AOB*/
+	min-height: 100%; /*AOB*/
+	padding-bottom: 30px;  /*AOB*/
+}
+
+body {
+	font-family: arial, helvetica, sans-serif;
+	font-size: 14px;
+}
+
+.navbar-nav > li > a, .navbar-brand {
+    padding-top:4px !important; 
+    padding-bottom:0 !important;
+    height: 24px;
+}
+
+.vertical{
+	margin-top: 100px;
+}
+
+.navbar {
+	min-height:24px !important;
+	-webkit-border-radius: 0; /* remove default rounded corners */
+	-moz-border-radius: 0; /* remove default rounded corners */
+	border-radius: 0; /* remove default rounded corners */
+	border: 0px;   /* Remove the navbar's default margin-bottom */ 
+	border-bottom: 1px solid #F8F8F8;
+	background-color: transparent;
+}
+		
+.navbar-inverse .navbar-toggle {
+	border: none;
+}
+	
+.navbar-inverse .navbar-nav > .active > a, .navbar-inverse .navbar-nav > .active > a:focus, .navbar-inverse .navbar-nav > .active > a:hover {
+    color: black;
+		background-color: transparent;
+}
+
+.navbar .nav > li > a:hover {
+	color: white;background-color: #C0C0C0;
+}
+	
+button.navbar-toggle{
+	padding: 3px 4px; /* default: 9px 10px */
+	margin-top: 3px;
+	margin-bottom: 3px;
+}
+
+.navbar-inverse .navbar-toggle:focus, .navbar-inverse .navbar-toggle:hover {
+	background-color: #C0C0C0;
+}
+
+.navbar-inverse .navbar-toggle:focus > .icon-bar, .navbar-inverse .navbar-toggle:hover > .icon-bar{
+	background-color: white;
+}
+
+.navbar-toggle .icon-bar {
+	width: 17px; /*default: 22px;*/
+	/* height: 2px; */ /* default */
+}
+
+.navbar-inverse .navbar-toggle .icon-bar {
+	 background-color: black;
+}
+
+.navbar-inverse .navbar-toggle .icon-bar:hover {
+	 background-color: white;
+}
+
+.navbar-collapse {
+	border: 0px; /* no dividing line between icon and menu items */
+}
+
+.tooltip {
+}
+
+.tooltip-inner {  /*Bootstrap style */
+  color: #333;
+	background-color: #fff;
+	opacity:1!important;
+	text-align: left;
+	display:block;
+	width: auto;
+	white-space: pre-wrap;
+	-webkit-box-shadow: 0 5px 10px rgba(0,0,0,.2);
+	box-shadow: 0 5px 10px rgba(0,0,0,.2);
+}
+
+.tooltip.in{
+	opacity:1!important;
+} 
+
+.tooltip .tooltip-arrow {
+	display: none;
+}
+
+.panel-body.button-bvs{
+	padding: 0px !important;
+}
+
+#left-side-panel .panel-group{
+	margin-top: 5px;
+}
+
+#left-side-panel .panel-body{
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+#left-side-panel .panel-body h4{
+	margin-top: 0px;
+	margin-bottom: 0px;
+}
+
+#left-side-panel .panel-body p{
+	font-size: 12px;
+}
+
+
+#left-side-panel .panel-body hr,.hr,p{
+		margin-top: 0px;
+		margin-bottom: 0px;
+}
+
+#left-side-panel.col-sm-2 {   
+    /* background: lightgrey; */
+}
+
+#main-content {
+	margin-bottom: 10px; /* Keep distance to footer */
+}
+
+#main-content.col-sm-10 {
+    /* background: yellow; */	
+}
+
+.btn-round{
+	border-radius: 17px;
+	outline: none !important; /* No border on focus in Chrome. Override bootstrap */
+}
+
+.btn-round:active{
+	transform: translateY(2px);
+}
+
+#street {
+	width: 300px;
+}
+
+div #AjaxResponse, div #street-select {
+	padding-top: 20px;
+	padding-bottom: 20px;
+	margin: auto;
+}
+
+.select2-rendered__match {
+  /* text-decoration: underline; */
+  font-weight: bold;
+}
+
+.select2-selection__placeholder {
+	color: inherit !important; /* Overrule default select2 grey color #999 for placeholder */
+}
+
+#label_street_select {
+    /* font-weight: 700; overrule bootstrap default for label */
+	font-weight: normal !important;
+}
+
+/* calendar.css BEGIN */
+input[type="submit"]{
+	font-size: 14px;
+}
+
+#JS span{
+	
+}
+
+#mycal-trad {
+  font-family: arial, helvetica, sans-serif;
+  font-size: 14px;
+  position: relative;
+  /* width: 90%; */
+  /* z-index: 15; */
+  
+  /* margin-top: 5%; */
+  /* left: 5%; */
+  display: table;
+  margin: 0 auto;
+}
+
+#calheader {
+	margin: 0px 0px;
+}
+
+#calheader p{
+	margin: 5px 0px;
+}
+
+table.calendarTable {
+	border-collapse: collapse;
+	text-align: left; 
+	table-layout: fixed;
+	/* width:650px; */
+}
+
+table.calendarTable th{
+	text-align: center;
+	vertical-align: top; 
+}
+
+table.calendarTable th,table.calendarTable td {
+	  padding: 2px 8px;
+}
+
+table.calendarTable tr.topblack  {
+	border-top: 3px solid black;
+}
+
+table.calendarTable tr.bottomblack  {
+	border-bottom: 3px solid black;
+}
+
+table.calendarTable col.first {
+	width: 120px;
+	border-right: 1px solid black;
+	/* vertical-align: top; Has no effect here?? see tg */
+}
+
+table.calendarTable col.second {
+	width: 400px;
+	border-right: 1px dotted black;
+	text-align: left;
+}
+
+table.calendarTable td.grey {
+	background: lightgrey;
+	height: 20px;
+}
+
+table.calendarTable th.darkgreen{
+	background: #02ad79;
+	color:white;
+}
+
+table.calendarTable th.yellow {
+	background: #ffd64c;
+}
+
+table.calendarTable th.green {
+	background: #43b657;
+}
+
+table.calendarTable th.blue {
+	background: #7cccbf;
+}
+
+table.calendarTable th.lightgreen {
+	background: #bfd954;
+}
+
+.color-dot {
+	border-radius: 20px;
+	border: none;
+	width: 20px;
+	height: 20px;
+}
+
+.UpEventsTable table table{
+	/* width: 300px; */
+}	
+
+table.UpEventsTable .h1, .h2, .h3, h1, h2, h3 {  /* override style.less */
+    margin-top: 0px;
+		margin-bottom: 0px;
+}
+
+table.UpEventsTable table,table.UpEventsTable table th,table.UpEventsTable table td{
+    /* border: 1px dotted lightgrey; */
+    border-collapse: collapse;
+}
+
+table.UpEventsTable td,table.UpEventsTable th{
+    padding: 5px;
+    text-align: left;
+		box-sizing: border-box;
+}
+
+table.UpEventsTable .dot-col{
+		width: 30px;
+    text-align: center;
+}
+
+.UpEventsTable .color-dot {
+	border-radius: 20px;
+	border: none;
+	width: 20px;
+	height: 20px;
+	resize: both;
+}
+
+.UpEventsTable .grey {
+	background: lightgrey;
+	height: 20px;
+}
+
+.UpEventsTable .darkgreen,.DGB{
+	/* background: #02ad79; */
+	background: #009900; /*dark green DGB*/	
+	color:white;
+}
+
+.UpEventsTable .yellow,.YEB {
+	background: #ffd64c;
+}
+
+.UpEventsTable .green,.GRB {
+	/*background: #43b657;*/
+	background: #33ff33; /*middle green*/
+}
+
+.UpEventsTable .blue {
+	background: #7cccbf;
+}
+
+.BUL {
+	/* background: #dc0b10; red, full red = #ff0000*/
+	background: #ff0000;	
+}
+
+.UpEventsTable .lightgreen,.SAC {
+	background: #bfd954;
+	/* background: #b3ffb3;*/ /* light green SAC */
+}
+
+.EXC{
+	background: #F5F5F5; /*HTML WhiteSmoke*/
+}
+
+#left-side-panel button{
+	padding: 0px;
+	background-color: transparent;
+	border: none;
+	width: 30px;
+	height: 30px;
+	outline: none; /* no border on focus in Chrome */
+}
+
+#left-side-panel .button:active {
+  transform: translateX(2px);
+}
+
+.icon-info {
+    color: blue;
+}
+.icon-info-bgr {
+    color: white;
+}
+
+#left-side-panel .fa-stack{
+	width: inherit !important;
+	height: inherit !important;
+	line-height: inherit !important;
+}
+
+#street {
+	width: 300px;
+}
+
+.select2-rendered__match {
+  /* text-decoration: underline; */
+  font-weight: bold;
+}
+
+div.boxMonthCal {
+		width: 280px; /* td width=40 x 7 (columns) */
+		margin: auto;
+}
+
+table.monthCal {
+	font-size:9px;
+	font-weight: bold;
+	text-align: center;
+  border-collapse: collapse;
+}
+
+table.monthCal .header  {
+	text-align: left;
+	color:#757575;
+  font-size:11px;	
+	padding-left: 15px;
+}
+
+table.monthCal tbody td {
+	color: #212121; /*days in month */	
+}
+
+table.monthCal td.prev-month, table.monthCal td.next-month{
+	color: #757575;
+	opacity: 0.3;
+}
+
+table.monthCal td.past,.past{
+	opacity: 0.2;
+}
+
+table.monthCal td, table.monthCal th {
+	color:#757575;
+	width: 40px;
+	height: 34px;
+	text-align:center;
+	box-sizing: border-box;		
+  padding: 5px 10px;
+	position: relative;
+}
+
+table.monthCal td > div{
+	margin: auto;
+	z-index: 100;
+}
+
+table.monthCal div.color-dot{
+	height: 20px;
+	width: 20px;
+	border: none;
+	border-radius: 20px;
+	line-height: 20px;
+	position: relative;
+	text-align: center;
+	vertical-align: middle;
+	/* z-index: 2; */
+}
+
+table.monthCal .today{
+	box-sizing: content-box;  /* border should be placed outside div */
+  -moz-box-sizing: content-box;
+  -webkit-box-sizing: content-box;
+	border: solid 2px #757575 !important;
+}
+
+table.monthCal .canvas{
+	position: absolute !important;
+	margin-left: -9.8px;
+	margin-top: 0.3px;
+	z-index:-1;
+}
+
+table.monthCal tfoot{
+	height:20px;
+}
+
+/* monthCal view END */
+
+
+footer { 
+  color: #666666;
+  position: absolute; /* AOB */
+  right: 0;
+  left: 0;
+  background-color: #efefef;
+  height: 30px; /* AOB */
+  bottom: 0;  /* sticky footer*/	
+  padding: 10px;
+  line-height: 10px;  
+}
+
+footer a {
+	color: darkgrey;
+}
+
+@media only screen and (max-width: 720px) {
+
+	.container h1 {
+		width: auto;
+		font-size: 20px;
+	}
+
+	.row > [class*="col-"] {
+		padding-left: 10px !important;
+		padding-right: 10px !important;
+	}
+
+	#street {
+		width: 100%;
+	}
+	
+	#streetname{
+		font-size: inherit;
+	}	
+	
+	#calheader h1 {
+		font-size: 90%;
+		font-weight: bold;
+	}
+
+	#mycal-trad {
+	  /*width: 100%; */
+	  /* left: 1%; */
+	  display: table; /*center div*/
+	  margin: 0 auto; /*center div*/
+	}
+	
+	table.calendarTable {
+		font-size: 90%;
+		width:98%;
+	}
+	
+	table.calendarTable col.first {
+		width: 70px;
+	}
+
+	table.calendarTable col.second {
+		width: 60%;
+	}	
+	
+	body {
+		padding-bottom: 30px;
+	}
+	
+	.tooltip-inner {  /*Bootstrap style */
+		font-size: 150%;
+	}
+	
+	div.boxMonthCal {
+			width: 308px; /* td width=44 x 7 (columns) */
+	}
+	table.monthCal {
+		font-size:11px;
+	}
+
+	table.monthCal .header  {
+		font-size:13px;	
+		padding-left: 18px;
+	}	
+	
+	table.monthCal td, table.monthCal th {
+		width:  44px;
+		height: 34px;
+		padding: 0px 5px;
+	}
+
+	table.monthCal div.color-dot{	
+			border-radius: 30px;
+			width: 30px;
+			height: 30px;
+			line-height: 30px;	
+	}
+	
+	table.monthCal .canvas{
+		margin-left: -15px;
+		margin-top: 0px
+	}
+
+	footer {
+	  /* bottom: auto; */ /* overrides bottom: 0 */
+	  font-size: 12px;
+	  height: 23px; 
+	  padding: auto;
+	  line-height: 7px; 
+	}
+	@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+		 /* IE10+ CSS */
+		table.monthCal .canvas{
+			margin: auto;
+		}
+	}
+	@supports (-ms-accelerator:true) {
+		 /* IE Edge 12+ CSS */ 
+		table.monthCal .canvas{
+			margin: auto;
+		}	 
+	}	
+}
+
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+   /* IE10+ CSS */
+	table.monthCal .canvas{
+		margin: auto;
+	}
+}
+
+@supports (-ms-accelerator:true) {
+   /* IE Edge 12+ CSS */ 
+	table.monthCal .canvas{
+		margin: auto;
+	}	 
+}
+
