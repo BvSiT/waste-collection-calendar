@@ -316,7 +316,7 @@
 											'browser' => $_SERVER['HTTP_USER_AGENT'],
 											'extra_info' => $extra_info
 											);
-			$message= implode($log_info,"|")."\n";
+			$message= implode("|",$log_info)."\n";
 			//echo $path_log;
 			//echo $message;exit;
 			error_log($message,3,$path_log);

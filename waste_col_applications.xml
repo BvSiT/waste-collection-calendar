@@ -27,7 +27,7 @@
 </application>
 <application>
 <type ID='config_select2'>
-<location>./config_select2.js</location>
+<location>./js/config_select2.js</location>
 </type>
 </application>
 <application>
@@ -57,7 +57,7 @@
 </application>
 <application>
 <type ID='color_dot_js'>
-<location>./color_dot.js</location>
+<location>./js/color_dot.js</location>
 </type>
 </application>
 <application>

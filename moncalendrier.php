@@ -12,10 +12,13 @@ function clean_input($value)
 	$value = htmlentities($value);
 	// Removes any html from the string and turns it into &lt; format
 	$value = strip_tags($value);
+	
+/* //Deprecated	
 	if (get_magic_quotes_gpc())  //BvS NB always returns FALSE as of PHP 5.4.0.
 	{
 		$value = stripslashes($value);// Gets rid of unwanted slashes
 	}
+*/
 	$value = htmlentities($value); 	// Removes any html from the string and turns it into &lt; format
 	$bad_chars = array( "{", "}", "(", ")", ";", ":", "<", ">", "/", "$" );
 	$value = str_ireplace($bad_chars,"",$value);			
