@@ -1096,65 +1096,6 @@ function print_data_calendar($i,$var_dump=false,$all_data=false) {
 		*/
 }
 
-function get_month($month_num,$short=true,$locale='fr_FR'){
-	$locales=array('fr_FR'=>array('fr_FR.utf8','fra'),
-				   'en_US'=>array('en_US.utf8','eng'),
-				   'nl_NL'=>array('nl_NL.utf8','dutch'),
-				   'de_DE'=>array('de_DE.utf8','german')
-				   );
-	$locale_is_set=null;			   
-	if (array_key_exists($locale,$locales)){
-		$locale_is_set=setlocale (LC_TIME, $locales[$locale][0],$locales[$locale][1]); //see strftime()
-	}
-	/* setlocale French does not work on mijndomein.nl (nl,en,de do work!)
-	*	$locale_is_set=setlocale(LC_TIME, 'fr_FR.UTF8', 'fr_FR.ISO8859-1',
-	*		'fr_FR.ISO8859-15', 'fr_FR.ISO-8859-15', 'fr.UTF8', 'fr_FR.UTF-8', 'fr.UTF-8');
-	*	echo '$locale_is_set='.$locale_is_set._B;
-	*/
-	if ($locale_is_set){
-		$date=mktime(0,0,0,$month_num,1,2017); //date as int for '2017-$month_num-1 00:00:00'
-		$month =strftime($short?"%b":"%B",$date); //Abbr. month according to set locale i.e. 'Feb','févr.'
-		/* Alt. to get French abbr. month from month num:
-		*	//Create a DateTime object set to '1970-$month_num-01 00:00:00'
-		*	$dateObj = DateTime::createFromFormat('!m', $month_num);
-		*	$date= $dateObj->format("Y-m-d"); //Date as string. Alt: $date=$dateObj->date
-		*	$date=strtotime($date);  date as int, which is the only way to get to strftime
-		*	$month= strftime("%b",$date); //Abbr. month according to set locale
-		* //NB!! DateTime::format with $format('F') produces sometimes the wrong abbr. month:
-		*	$dateObj = DateTime::createFromFormat('!m', 2);
-		*	$month = $dateObj->format('F'); // i.e. Febr
-		*	echo strftime("%b",strtotime($month)); // March: wrong month!!!
-		*/			
-	}
-	else{
-		if (!$short) {
-			$months_FR= array('janvier','février','mars',
-							  'avril','mai','juin',
-							  'juillet','août','septembre',
-							  'octobre','novembre','décembre');
-		}				  
-		else {
-			$months_FR=array('janv.','févr.','mars','avr.','mai','juin',
-							 'juil.','août','sept.','oct.','nov.','déc.');
-		}				  
-		$month= $months_FR[$month_num-1]; 				  
-	}
-	/* NB mb_convert_encoding($month, 'UTF-8','ISO-8859-15') will have to be used to
-	* to convert multibyte French diacriticals. But do not use 2 times on the same string!
-	* mb_check_encoding($month, 'ASCII')=false if diacritical char is present in string
-	* mb_check_encoding($month, 'UTF-8')=true if encoding UTF-8 (not the case if strftime() is used)		
-	* see also https://stackoverflow.com/questions/16821534/check-if-is-multibyte-string-in-php
-	*/
-	//var_dump(mb_check_encoding($month, 'ASCII'));
-	//var_dump(mb_check_encoding($month, 'UTF-8'));
-	//if (mb_check_encoding($month, 'ASCII')&&mb_check_encoding($month, 'UTF-8')){
-
-	if ((!mb_check_encoding($month, 'ASCII'))&&(!mb_check_encoding($month, 'UTF-8'))){
-		$month=mb_convert_encoding($month, 'UTF-8','ISO-8859-15');
-	}
-	return $month;
-}
-
 function dump_classes($last=0){
 	$class_array = get_declared_classes();
 	$max=count($class_array);
@@ -1425,3 +1366,63 @@ function get_street_data($s){
 	}
 	return $data;
 }
+
+//23-12-22 Obsolete. Uses strftime() which is deprecated in 8.1. Now only CalFunctions::get_month() is used
+//function get_monthx($month_num,$short=true,$locale='fr_FR'){
+//	$locales=array('fr_FR'=>array('fr_FR.utf8','fra'),
+//				   'en_US'=>array('en_US.utf8','eng'),
+//				   'nl_NL'=>array('nl_NL.utf8','dutch'),
+//				   'de_DE'=>array('de_DE.utf8','german')
+//				   );
+//	$locale_is_set=null;
+//	if (array_key_exists($locale,$locales)){
+//		$locale_is_set=setlocale (LC_TIME, $locales[$locale][0],$locales[$locale][1]); //see strftime()
+//	}
+//	/* setlocale French does not work on mijndomein.nl (nl,en,de do work!)
+//	*	$locale_is_set=setlocale(LC_TIME, 'fr_FR.UTF8', 'fr_FR.ISO8859-1',
+//	*		'fr_FR.ISO8859-15', 'fr_FR.ISO-8859-15', 'fr.UTF8', 'fr_FR.UTF-8', 'fr.UTF-8');
+//	*	echo '$locale_is_set='.$locale_is_set._B;
+//	*/
+//	if ($locale_is_set){
+//		$date=mktime(0,0,0,$month_num,1,2017); //date as int for '2017-$month_num-1 00:00:00'
+//		$month =strftime($short?"%b":"%B",$date); //Abbr. month according to set locale i.e. 'Feb','févr.'
+//		/* Alt. to get French abbr. month from month num:
+//		*	//Create a DateTime object set to '1970-$month_num-01 00:00:00'
+//		*	$dateObj = DateTime::createFromFormat('!m', $month_num);
+//		*	$date= $dateObj->format("Y-m-d"); //Date as string. Alt: $date=$dateObj->date
+//		*	$date=strtotime($date);  date as int, which is the only way to get to strftime
+//		*	$month= strftime("%b",$date); //Abbr. month according to set locale
+//		* //NB!! DateTime::format with $format('F') produces sometimes the wrong abbr. month:
+//		*	$dateObj = DateTime::createFromFormat('!m', 2);
+//		*	$month = $dateObj->format('F'); // i.e. Febr
+//		*	echo strftime("%b",strtotime($month)); // March: wrong month!!!
+//		*/
+//	}
+//	else{
+//		if (!$short) {
+//			$months_FR= array('janvier','février','mars',
+//							  'avril','mai','juin',
+//							  'juillet','août','septembre',
+//							  'octobre','novembre','décembre');
+//		}
+//		else {
+//			$months_FR=array('janv.','févr.','mars','avr.','mai','juin',
+//							 'juil.','août','sept.','oct.','nov.','déc.');
+//		}
+//		$month= $months_FR[$month_num-1];
+//	}
+//	/* NB mb_convert_encoding($month, 'UTF-8','ISO-8859-15') will have to be used to
+//	* to convert multibyte French diacriticals. But do not use 2 times on the same string!
+//	* mb_check_encoding($month, 'ASCII')=false if diacritical char is present in string
+//	* mb_check_encoding($month, 'UTF-8')=true if encoding UTF-8 (not the case if strftime() is used)
+//	* see also https://stackoverflow.com/questions/16821534/check-if-is-multibyte-string-in-php
+//	*/
+//	//var_dump(mb_check_encoding($month, 'ASCII'));
+//	//var_dump(mb_check_encoding($month, 'UTF-8'));
+//	//if (mb_check_encoding($month, 'ASCII')&&mb_check_encoding($month, 'UTF-8')){
+//
+//	if ((!mb_check_encoding($month, 'ASCII'))&&(!mb_check_encoding($month, 'UTF-8'))){
+//		$month=mb_convert_encoding($month, 'UTF-8','ISO-8859-15');
+//	}
+//	return $month;
+//}

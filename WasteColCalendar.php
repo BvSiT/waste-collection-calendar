@@ -26,8 +26,8 @@ class WasteColCalendar{
 	private $waste_types;
 	/* Structure of $waste_types: 
 	* 'DGB' => array(
-    *     'waste_type_name' =>'Bac vert foncé',
-		*			'waste_type_info'=>'Ordures ménagères',
+    *     'waste_type_name' =>'Bac vert foncï¿½',
+		*			'waste_type_info'=>'Ordures mï¿½nagï¿½res',
     *     'sector_name' => null,
     *     'sector_PM' => null,
     *     'sector_weekday' => null,
@@ -85,6 +85,7 @@ class WasteColCalendar{
 		$this->excluded_col_dates[]='2018-03-20';  //DGB
 		$this->excluded_col_dates[]='2018-04-24';  //DGB + BUL
 		$this->dt_create=DateTime::CreateFromFormat('Y-m-d H:i:s','2018-04-09 13:00:00' );
+        $this->dt_create=DateTime::CreateFromFormat('Y-m-d H:i:s','2023-01-01 13:00:00' ); //Passed test
 		*/
 		/*END DEBUG**********************************/
 		
@@ -147,9 +148,9 @@ class WasteColCalendar{
 	public function get_full_street() {
 		
 		/* Add a space if street does end with a alphanumeric char
-		* If it ends with i.e. "’" do not add space
+		* If it ends with i.e. "ï¿½" do not add space
 		* Note: The following will give an error Invalid UTF character:
-		* preg_match("/’$/u",$this->type_street)
+		* preg_match("/ï¿½$/u",$this->type_street)
 		* No error if echoed within a page with:
 		* <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr">
 		* <head>
@@ -232,10 +233,10 @@ class WasteColCalendar{
 	private function max_year_col_dates($mysqli){
 		/* return latest year of col_dates in the db */
 		$query="SELECT MAX(YEAR(col_date)) AS max_year FROM v_col_dates_smaller";
-		$result = mysqli_query($mysqli,$query) or die ('Couldn’t execute query: '.$query);
+		$result = mysqli_query($mysqli,$query) or die ('Couldnï¿½t execute query: '.$query);
 		if (!$result){
 			$err_msg="Error description: " . mysqli_error($mysqli)."</BR>\n";
-			$err_msg.='Couldn’t execute query: '.$query."<BR>\n";
+			$err_msg.='Couldnï¿½t execute query: '.$query."<BR>\n";
 			throw new Exception($err_msg);
 		}
 		if ($result->num_rows ==1) {
@@ -255,17 +256,17 @@ class WasteColCalendar{
 		$query="SELECT id FROM location WHERE name_street=?";
 		if (!($stmt = $mysqli->prepare($query))) {
 			$err_msg="Prepare failed: (" . $mysqli->errno . ") " . $mysqli->error."</BR>\n";
-			$err_msg.='Couldn’t execute query: '.$query."<BR>\n";
+			$err_msg.='Couldnï¿½t execute query: '.$query."<BR>\n";
 			throw new Exception($err_msg);			
 		}
 		if (!($stmt->bind_param("s", $name_street))){
 			$err_msg = "Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error."</BR>\n";
-			$err_msg.='Couldn’t execute query: '.$query."<BR>\n";
+			$err_msg.='Couldnï¿½t execute query: '.$query."<BR>\n";
 			throw new Exception($err_msg);						
 		}
 		if (!$stmt->execute()){
 			$err_msg = "Execute failed: (" . $stmt->errno . ") " . $stmt->error."</BR>\n";
-			$err_msg.='Couldn’t execute query: '.$query."<BR>\n";
+			$err_msg.='Couldnï¿½t execute query: '.$query."<BR>\n";
 			throw new Exception($err_msg);									
 		}
 		$result=$stmt->get_result();		
@@ -276,17 +277,17 @@ class WasteColCalendar{
 		}
 		else {
 			$err_msg = "no rows found</BR>\n";
-			$err_msg.='Couldn’t execute query: '.$query."<BR>\n";
+			$err_msg.='Couldnï¿½t execute query: '.$query."<BR>\n";
 			throw new Exception($err_msg);									
 		}
 	}
 
 	private function load_location_data($location_id,$mysqli){
 		$query="SELECT id,name_street,type_street,house_nos FROM location WHERE id=".$location_id;
-		$result = mysqli_query($mysqli,$query) or die ('Couldn’t execute query: '.$query);
+		$result = mysqli_query($mysqli,$query) or die ('Couldnï¿½t execute query: '.$query);
 		if (!$result){
 			$err_msg="Error description: " . mysqli_error($mysqli)."</BR>\n";
-			$err_msg.='Couldn’t execute query: '.$query."<BR>\n";
+			$err_msg.='Couldnï¿½t execute query: '.$query."<BR>\n";
 			throw new Exception($err_msg);
 		}
 		if ($result->num_rows ==1) {
@@ -308,10 +309,10 @@ class WasteColCalendar{
 	private function load_waste_type_data($location_id,$mysqli){
 		/* v_waste_types contains also fields 'sector_name','sector_PM','sector_weekday' */
 		$query="SELECT * FROM v_waste_types WHERE location_id=".$location_id;
-		$result = mysqli_query($mysqli,$query) or die ('Couldn’t execute query: '.$query);
+		$result = mysqli_query($mysqli,$query) or die ('Couldnï¿½t execute query: '.$query);
 		if (!$result){
 			$err_msg="Error description: " . mysqli_error($mysqli)."</BR>\n";
-			$err_msg.='Couldn’t execute query: '.$query."<BR>\n";
+			$err_msg.='Couldnï¿½t execute query: '.$query."<BR>\n";
 			throw new Exception($err_msg);
 		}
 		if ($result->num_rows >0) {
@@ -332,10 +333,10 @@ class WasteColCalendar{
 	
 	private function load_week_pattern_data($location_id,$mysqli){
 		$query="SELECT * FROM v_week_patterns_small WHERE location_id=".$location_id;
-		$result = mysqli_query($mysqli,$query) or die ('Couldn’t execute query: '.$query);
+		$result = mysqli_query($mysqli,$query) or die ('Couldnï¿½t execute query: '.$query);
 		if (!$result){
 			$err_msg="Error description: " . mysqli_error($mysqli)."</BR>\n";
-			$err_msg.='Couldn’t execute query: '.$query."<BR>\n";
+			$err_msg.='Couldnï¿½t execute query: '.$query."<BR>\n";
 			throw new Exception($err_msg);
 		}
 		if ($result->num_rows >0) {
@@ -427,10 +428,10 @@ class WasteColCalendar{
 			//$query.=' AND col_date >= NOW()';
 			$query.=' AND col_date >= "'.$dt_now->Format("Y-m-d").'"';
 		}
-		$result = mysqli_query($mysqli,$query) or die ('Couldn’t execute query: '.$query);
+		$result = mysqli_query($mysqli,$query) or die ('Couldnï¿½t execute query: '.$query);
 		if (!$result){
 			$err_msg="Error description: " . mysqli_error($mysqli)."</BR>\n";
-			$err_msg.='Couldn’t execute query: '.$query."<BR>\n";
+			$err_msg.='Couldnï¿½t execute query: '.$query."<BR>\n";
 			throw new Exception($err_msg);
 		}
 		if ($result->num_rows >0) {
@@ -467,16 +468,26 @@ class WasteColCalendar{
 		}
 		else {
 			foreach($week_pattern as $key=>$val){
-				if (setlocale (LC_TIME, 'fr_FR.utf8','fra')) { 
+/*
+// Disabled 24-12-22. strftime() is predicated in PHP 8.1
+// Also probably all is correctly handled now by CalFunctions::day_of_week_from_date() NB Not tested here!
+				if (setlocale (LC_TIME, 'fr_FR.utf8','fra')) {
 					$week_pattern_FR[]= strftime("%A",strtotime($key));
+
 				}
 				else
 				{
-					/* $key = 'mon','tue',etc */
-					$date = strtotime($key); //date as long int from short weekday (!)
-					$date=strftime("%Y-%m-%d",$date); //date as string 'YYYY-MM-DD'
+
+					// $key = 'mon','tue',etc
+                    $dt_date = new DateTime($key);
+                    $date = $dt_date->format("Y-m-d");
 					$week_pattern_FR[]=CalFunctions::day_of_week_from_date($date);
 				}
+*/
+                // $key = 'mon','tue',etc
+                $dt_date = new DateTime($key);
+                $date = $dt_date->format("Y-m-d");
+                $week_pattern_FR[]=CalFunctions::day_of_week_from_date($date);
 			}
 			$last=end($week_pattern_FR);			
 			$week_pattern_FR=implode(', ',$week_pattern_FR);
@@ -495,13 +506,12 @@ class WasteColCalendar{
 		*	 	  'SAC' => array ('2017-04-25 00:00:00',...)
 		*		   etc.)
 		* format_col_dates() formats the dates ready to echo to a webpage
-		* I.e. '1 et 10 janv. - 5, 15, 25 févr.' etc.
+		* I.e. '1 et 10 janv. - 5, 15, 25 fï¿½vr.' etc.
 		*
 		* To represent dates in other languages then French:
 		* 	$locale='en-EN','nl_NL','de-DE', 'en-US',etc.
 		*   Set also $str_and to the proper language; 
 		*/
-
 		$locales=CalFunctions::get_locales();
 		$locales['fr_FR'][]='et';
 		$locales['en_US'][]='and';
@@ -523,7 +533,7 @@ class WasteColCalendar{
 		}
 		else
 		{
-			$s='Aucun date à venir pour 2017';
+			$s='Aucun date ï¿½ venir pour 2017';
 			$s= mb_convert_encoding($s, 'UTF-8','ISO-8859-15');
 			//$s= "<span style='color:grey'>".$s."</span>";
 			$s= "<i>".$s."</i>";
@@ -716,8 +726,8 @@ class WasteColCalendar{
 		* Return: an assoc. array with structure like:
 		* array('DGB'=>array('interv'=>'Ce soir',
 		*							 array('full_date'=>'Lundi matin 22 janv.')
-		*							 array('waste_type_name')=>'Bac vert foncé'),
-		*							 'waste_type_info'=>'Ordures ménagères',
+		*							 array('waste_type_name')=>'Bac vert foncï¿½'),
+		*							 'waste_type_info'=>'Ordures mï¿½nagï¿½res',
 		*       'YEB'=>...etc.
 		* );
 		*
@@ -776,7 +786,7 @@ class WasteColCalendar{
 		switch (true){
 			case $num_days==0:
 				if ($started){
-					return mb_convert_encoding('À ce moment', 'UTF-8','ISO-8859-15');
+					return mb_convert_encoding('ï¿½ ce moment', 'UTF-8','ISO-8859-15');
 				}
 				else
 				{

@@ -5,8 +5,10 @@
 						   'nl_NL'=>array('nl_NL.utf8','dutch'),
 						   'de_DE'=>array('de_DE.utf8','german')
 						   );
-		public static function get_month($month_num,$short=true,$locale='fr_FR'){
-			$locale_is_set=null;			   
+
+   		public static function get_month($month_num,$short=true,$locale='fr_FR'){
+            //Version 8.1 without using strftime()
+			$locale_is_set=null;
 			if (array_key_exists($locale,self::$locales)){
 				$locale_is_set=setlocale (LC_TIME, self::$locales[$locale][0],self::$locales[$locale][1]); //see strftime()
 			}
@@ -17,18 +19,10 @@
 			*/
 			if ($locale_is_set){
 				$date=mktime(0,0,0,$month_num,1,2017); //date as int for '2017-$month_num-1 00:00:00'
-				$month =strftime($short?"%b":"%B",$date); //Abbr. month according to set locale i.e. 'Feb','févr.'
-				/* Alt. to get French abbr. month from month num:
-				* //Create a DateTime object set to '1970-$month_num-01 00:00:00'
-				* $dateObj = DateTime::createFromFormat('!m', $month_num);
-				* $date= $dateObj->format("Y-m-d"); //Date as string. Alt: $date=$dateObj->date
-				* $date=strtotime($date);  date as int, which is the only way to get to strftime
-				* $month= strftime("%b",$date); //Abbr. month according to set locale
-				* NB!! DateTime::format with $format('F') produces sometimes the wrong abbr. month:
-				* $dateObj = DateTime::createFromFormat('!m', 2);
-				* $month = $dateObj->format('F'); // i.e. Febr
-				* echo strftime("%b",strtotime($month)); // March: wrong month!!!
-				*/			
+				//DEPRECATED $month =strftime($short?"%b":"%B",$date); //Abbr. month according to set locale i.e. 'Feb','févr.'
+				$formatter = new IntlDateFormatter($locale, IntlDateFormatter::FULL, IntlDateFormatter::FULL);
+				$formatter->setPattern($short?"MMM":"MMMM");
+				$month = $formatter->format($date);
 			}
 			else{
 				if (!$short) {
@@ -36,78 +30,89 @@
 									  'avril','mai','juin',
 									  'juillet','août','septembre',
 									  'octobre','novembre','décembre');
-				}				  
+				}
 				else {
 					$months_FR=array('janv.','févr.','mars','avr.','mai','juin',
 									 'juil.','août','sept.','oct.','nov.','déc.');
-				}				  
-				$month= $months_FR[$month_num-1]; 				  
+				}
+				$month= $months_FR[$month_num-1];
 			}
 			/* NB mb_convert_encoding($month, 'UTF-8','ISO-8859-15') will have to be used to
 			* to convert multibyte French diacriticals. But do not use 2 times on the same string!
-			*/	
+			*/
 			/* mb_check_encoding($month, 'ASCII')=false if diacritical char is present in string
-			* mb_check_encoding($month, 'UTF-8')=true if encoding UTF-8 (not the case if strftime() is used)		
+			* mb_check_encoding($month, 'UTF-8')=true if encoding UTF-8 (not the case if strftime() is used)
 			* see also https://stackoverflow.com/questions/16821534/check-if-is-multibyte-string-in-php
 			*/
 			//var_dump(mb_check_encoding($month, 'ASCII'));
 			//var_dump(mb_check_encoding($month, 'UTF-8'));
-			
+
 			//if (mb_check_encoding($month, 'ASCII')&&mb_check_encoding($month, 'UTF-8')){
 			if ((!mb_check_encoding($month, 'ASCII'))&&(!mb_check_encoding($month, 'UTF-8'))){
 				$month=mb_convert_encoding($month, 'UTF-8','ISO-8859-15');
 			}
 			return $month;
 		}
-		
+
 		public static function day_of_week_from_date($date,$locale='fr_FR'){
-			/* $date is string with format "YYYY-MM-DD HH:MM:SS.000000" */
-			$locale_is_set=null;			   
+			/* $date is string with format "YYYY-MM-DD HH:MM:SS.000000"
+			*  returns day of week for locale i.e. 'jeudi' or 'Thursday' */
+			$locale_is_set=null;
 			if (array_key_exists($locale,self::$locales)){
-				$locale_is_set=setlocale (LC_TIME, self::$locales[$locale][0],self::$locales[$locale][1]); //see strftime()
+				$locale_is_set=setlocale (LC_TIME, self::$locales[$locale][0],self::$locales[$locale][1]);
 			}
-			/* setlocale French does not work on mijndomein.nl (nl,en,de do work!)
-			$locale_is_set=setlocale(LC_TIME, 'fr_FR.UTF8', 'fr_FR.ISO8859-1',
-				'fr_FR.ISO8859-15', 'fr_FR.ISO-8859-15', 'fr.UTF8', 'fr_FR.UTF-8', 'fr.UTF-8');
-			echo '$locale_is_set='.$locale_is_set._B;
-			*/
+
+            //NB Not clear why this was done??
 			/*  Use explode() to trim the time */
-			$date=explode(" ",$date)[0];
-			/* Or:  without explode() : $date=DateTime::CreateFromFormat('!Y-m-j+',$date); 
-			*  The + prevents error for trailing data, only warning in DateTime::getLastErrors() */				
-			$date=DateTime::CreateFromFormat('!Y-m-j',$date);
+			//$date=explode(" ",$date)[0];
+			/* Or:  without explode() : $date=DateTime::CreateFromFormat('!Y-m-j+',$date);
+			*  The + prevents error for trailing data, only warning in DateTime::getLastErrors() */
+			//$date=DateTime::CreateFromFormat('!Y-m-j',$date);
+			$date=new DateTime($date);
 
 			if ($locale_is_set){
-				$str_day=$date->format('d M Y'); //i.e. '12 Dec 2017';					
-				$str_day=strftime("%A",strtotime($str_day)); //According to locale Fr-fr i.e. 'jeudi'			
+                    $formatter = new IntlDateFormatter($locale, IntlDateFormatter::FULL, IntlDateFormatter::FULL);
+                    //See https://unicode-org.github.io/icu/userguide/format_parse/datetime/#formatting-dates
+                    $formatter->setPattern("EEEE"); //day of week i.e. 'Thursday'
+                    $str_day = $formatter->format($date);
 				}
 			else {
+				/* setlocale French does not work on mijndomein.nl (nl,en,de do work!)
+				* $locale_is_set=setlocale(LC_TIME, 'fr_FR.UTF8', 'fr_FR.ISO8859-1',
+				*	'fr_FR.ISO8859-15', 'fr_FR.ISO-8859-15', 'fr.UTF8', 'fr_FR.UTF-8', 'fr.UTF-8');
+				* echo '$locale_is_set='.$locale_is_set._B;
+				*/
 				$days_of_week_FR= array('dimanche','lundi','mardi','mercredi',
 									  'jeudi','vendredi','samedi');
 				$day_num=$date->format('w');
 				$str_day=$days_of_week_FR[$day_num];
 			}
 			return $str_day;
-		}		
-		
+		}
+
 		public static function day_of_week_locale_from_EN($day_of_week_EN,$locale='fr_FR'){
-			/* $day_of_week_EN can be a short weekday name like 'mon','tue', etc. or 'monday', etc. */
+			/* $day_of_week_EN can be a short weekday name like 'mon','tue', etc. or 'monday', etc.
+			*  Returns day of week in locale i.e. 'jeudi'
+			*/
 			$locale_is_set=null;			   
 			if (array_key_exists($locale,self::$locales)){
-				$locale_is_set=setlocale (LC_TIME, self::$locales[$locale][0],self::$locales[$locale][1]); //see strftime()
+				$locale_is_set=setlocale (LC_TIME, self::$locales[$locale][0],self::$locales[$locale][1]);
 			}
-			/* setlocale() French does not work on mijndomein.nl (nl,en,de do work!)
-				$locale_is_set=setlocale(LC_TIME, 'fr_FR.UTF8', 'fr_FR.ISO8859-1',
-				'fr_FR.ISO8859-15', 'fr_FR.ISO-8859-15', 'fr.UTF8', 'fr_FR.UTF-8', 'fr.UTF-8');
-				echo '$locale_is_set='.$locale_is_set._B;
-			*/
-						
 			$date=strtotime($day_of_week_EN);
 			if ($date){
 				if ($locale_is_set){
-					$str_day=strftime("%A",$date); //If locale fr_FR i.e. 'jeudi'			
+                        $formatter = new IntlDateFormatter($locale, IntlDateFormatter::FULL, IntlDateFormatter::FULL);
+                        //See https://unicode-org.github.io/icu/userguide/format_parse/datetime/#formatting-dates
+                        //TODO return short day of week name if passed short
+                        $formatter->setPattern("EEEE"); //day of week according to locale i.e. 'jeudi'
+                        $str_day = $formatter->format($date);
 					}
 				else {
+                    /* setlocale() French does not work on mijndomein.nl (nl,en,de do work!)
+                    *  $locale_is_set=setlocale(LC_TIME, 'fr_FR.UTF8', 'fr_FR.ISO8859-1',
+                    *       'fr_FR.ISO8859-15', 'fr_FR.ISO-8859-15', 'fr.UTF8', 'fr_FR.UTF-8', 'fr.UTF-8');
+                    *   echo '$locale_is_set='.$locale_is_set._B;//DEBUG
+                    */
 					$days_of_week_FR= array('dimanche','lundi','mardi','mercredi',
 										  'jeudi','vendredi','samedi');
 					$day_num=strftime("%w",$date);
@@ -288,7 +293,7 @@
 			$dt1->setTime(0,0);
 			$dt2->setTime(0,0);
 			$diff=$dt2->diff($dt1);
-			var_dump($diff);
+			//var_dump($diff);
 			return $diff->invert?$diff->days:$diff->days*-1;
 		}
 		
@@ -410,3 +415,88 @@
 			return $output;
 		}
 	}
+
+//    public static function get_monthX($month_num,$short=true,$locale='fr_FR'){
+//        $locale_is_set=null;
+//        if (array_key_exists($locale,self::$locales)){
+//            $locale_is_set=setlocale (LC_TIME, self::$locales[$locale][0],self::$locales[$locale][1]); //see strftime()
+//        }
+//        /* setlocale French does not work on mijndomein.nl (nl,en,de do work!)
+//        $locale_is_set=setlocale(LC_TIME, 'fr_FR.UTF8', 'fr_FR.ISO8859-1',
+//            'fr_FR.ISO8859-15', 'fr_FR.ISO-8859-15', 'fr.UTF8', 'fr_FR.UTF-8', 'fr.UTF-8');
+//        echo '$locale_is_set='.$locale_is_set._B;
+//        */
+//        if ($locale_is_set){
+//            $date=mktime(0,0,0,$month_num,1,2017); //date as int for '2017-$month_num-1 00:00:00'
+//            $month =strftime($short?"%b":"%B",$date); //Abbr. month according to set locale i.e. 'Feb','févr.'
+//            /* Alt. to get French abbr. month from month num:
+//            * //Create a DateTime object set to '1970-$month_num-01 00:00:00'
+//            * $dateObj = DateTime::createFromFormat('!m', $month_num);
+//            * $date= $dateObj->format("Y-m-d"); //Date as string. Alt: $date=$dateObj->date
+//            * $date=strtotime($date);  date as int, which is the only way to get to strftime
+//            * $month= strftime("%b",$date); //Abbr. month according to set locale
+//            * NB!! DateTime::format with $format('F') produces sometimes the wrong abbr. month:
+//            * $dateObj = DateTime::createFromFormat('!m', 2);
+//            * $month = $dateObj->format('F'); // i.e. Febr
+//            * echo strftime("%b",strtotime($month)); // March: wrong month!!!
+//            */
+//        }
+//        else{
+//            if (!$short) {
+//                $months_FR= array('janvier','février','mars',
+//                                  'avril','mai','juin',
+//                                  'juillet','août','septembre',
+//                                  'octobre','novembre','décembre');
+//            }
+//            else {
+//                $months_FR=array('janv.','févr.','mars','avr.','mai','juin',
+//                                 'juil.','août','sept.','oct.','nov.','déc.');
+//            }
+//            $month= $months_FR[$month_num-1];
+//        }
+//        /* NB mb_convert_encoding($month, 'UTF-8','ISO-8859-15') will have to be used to
+//        * to convert multibyte French diacriticals. But do not use 2 times on the same string!
+//        */
+//        /* mb_check_encoding($month, 'ASCII')=false if diacritical char is present in string
+//        * mb_check_encoding($month, 'UTF-8')=true if encoding UTF-8 (not the case if strftime() is used)
+//        * see also https://stackoverflow.com/questions/16821534/check-if-is-multibyte-string-in-php
+//        */
+//        //var_dump(mb_check_encoding($month, 'ASCII'));
+//        //var_dump(mb_check_encoding($month, 'UTF-8'));
+//
+//        //if (mb_check_encoding($month, 'ASCII')&&mb_check_encoding($month, 'UTF-8')){
+//        if ((!mb_check_encoding($month, 'ASCII'))&&(!mb_check_encoding($month, 'UTF-8'))){
+//            $month=mb_convert_encoding($month, 'UTF-8','ISO-8859-15');
+//        }
+//        return $month;
+//    }
+
+//		public static function day_of_week_from_dateX($date,$locale='fr_FR'){
+//			/* $date is string with format "YYYY-MM-DD HH:MM:SS.000000" */
+//			$locale_is_set=null;
+//			if (array_key_exists($locale,self::$locales)){
+//				$locale_is_set=setlocale (LC_TIME, self::$locales[$locale][0],self::$locales[$locale][1]); //see strftime()
+//			}
+//			/* setlocale French does not work on mijndomein.nl (nl,en,de do work!)
+//			$locale_is_set=setlocale(LC_TIME, 'fr_FR.UTF8', 'fr_FR.ISO8859-1',
+//				'fr_FR.ISO8859-15', 'fr_FR.ISO-8859-15', 'fr.UTF8', 'fr_FR.UTF-8', 'fr.UTF-8');
+//			echo '$locale_is_set='.$locale_is_set._B;
+//			*/
+//			/*  Use explode() to trim the time */
+//			$date=explode(" ",$date)[0];
+//			/* Or:  without explode() : $date=DateTime::CreateFromFormat('!Y-m-j+',$date);
+//			*  The + prevents error for trailing data, only warning in DateTime::getLastErrors() */
+//			$date=DateTime::CreateFromFormat('!Y-m-j',$date);
+//
+//			if ($locale_is_set){
+//				$str_day=$date->format('d M Y'); //i.e. '12 Dec 2017';
+//				$str_day=strftime("%A",strtotime($str_day)); //According to locale Fr-fr i.e. 'jeudi'
+//				}
+//			else {
+//				$days_of_week_FR= array('dimanche','lundi','mardi','mercredi',
+//									  'jeudi','vendredi','samedi');
+//				$day_num=$date->format('w');
+//				$str_day=$days_of_week_FR[$day_num];
+//			}
+//			return $str_day;
+//		}

@@ -315,8 +315,9 @@ class MonthCalendar {
 			$preYear = $this->currentMonth==1?intval($this->currentYear)-1:$this->currentYear;
 		}
 
-		if (function_exists('get_month')){
-			$title = ucfirst(get_month($this->currentMonth,false)).' '.$this->currentYear;	// e.g. 'Janvier 2018'
+
+		if (method_exists('CalFunctions','get_month')){
+			$title = ucfirst(CalFunctions::get_month($this->currentMonth,false)).' '.$this->currentYear;	// e.g. 'Janvier 2018'
 		}
 		else {
 			$title=date('F Y',strtotime($this->currentYear.'-'.$this->currentMonth.'-1')); // e.g. 'Januari 2018'
